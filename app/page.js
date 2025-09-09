@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { supabase } from '@/lib/supabaseClient';
+import Link from "next/link"; // ⬅️ ajouté
 
 export default function Home() {
   const [items, setItems] = useState([]);
@@ -29,10 +30,14 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-gray-50">
+      {/* ⚠️ Tu as déjà un header/nav dans layout.js, tu peux retirer celui-ci.
+          Si tu veux le garder, change <a> en <Link>. */}
       <header className="sticky top-0 z-10 bg-white border-b">
         <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
           <h1 className="text-xl font-bold">Select Immo CI</h1>
-          <a href="#" className="text-sm text-white bg-black px-3 py-1.5 rounded-lg">Publier</a>
+          <Link href="/publier" className="text-sm text-white bg-black px-3 py-1.5 rounded-lg">
+            Publier
+          </Link>
         </div>
       </header>
 
@@ -57,7 +62,7 @@ export default function Home() {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.25, delay: idx * 0.03 }}
-                  whileHover={{ y: -2 }} // optionnel: petit lift au survol
+                  whileHover={{ y: -2 }}
                   className="bg-white rounded-2xl overflow-hidden border hover:shadow-sm transition"
                 >
                   {primary?.url ? (
@@ -80,9 +85,12 @@ export default function Home() {
                     <p className="text-xs text-gray-500">
                       {[it.commune, it.city].filter(Boolean).join(', ')}
                     </p>
-                    <a href={`/listing/${it.id}`} className="inline-block mt-2 text-sm underline">
+                    <Link
+                      href={`/listing/${it.id}`}
+                      className="inline-block mt-2 text-sm underline"
+                    >
                       Voir le détail
-                    </a>
+                    </Link>
                   </div>
                 </motion.article>
               );
