@@ -16,7 +16,7 @@ export default function PublierPage() {
     bedrooms: '',
     description: ''
   });
-  const [files, setFiles] = useState<File[]>([]);
+  const [files, setFiles] = useState([]); // <-- pas de <File[]>
   const [loading, setLoading] = useState(false);
   const [err, setErr] = useState('');
 
@@ -28,14 +28,14 @@ export default function PublierPage() {
     });
   }, [router]);
 
-  async function onSubmit(e: React.FormEvent) {
+  async function onSubmit(e) { // <-- pas de React.FormEvent
     e.preventDefault();
     if (!user) return;
     setErr('');
     setLoading(true);
 
     try {
-      // 1) créer l'annonce en brouillon (INSÉRATION + .select('*').single())
+      // 1) créer l'annonce en brouillon
       const { data: listing, error } = await supabase
         .from('listings')
         .insert({
@@ -53,7 +53,6 @@ export default function PublierPage() {
         .select('*')
         .single();
 
-      // → BLOC demandé : log + setErr + early return
       if (error) {
         console.error('INSERT LISTING ERROR', error);
         setErr(error.message);
@@ -81,7 +80,7 @@ export default function PublierPage() {
 
       alert('Annonce enregistrée en brouillon. Un admin doit la publier.');
       router.push(`/listing/${listing.id}`);
-    } catch (e: any) {
+    } catch (e) {
       console.error('SUBMIT FATAL ERROR', e);
       setErr(e?.message || 'Une erreur est survenue.');
     } finally {
