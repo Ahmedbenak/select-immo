@@ -52,8 +52,15 @@ export default function LoginPage() {
           </button>
         </form>
 
-        <div className="mt-4 text-sm">
-          <button onClick={onRegister} className="underline">Créer un compte</button>
+        {/* Nouveau bouton "Créer un compte" */}
+        <div className="mt-4">
+          <button 
+            onClick={onRegister} 
+            disabled={loading}
+            className="w-full px-3 py-2 rounded-lg bg-blue-600 text-white font-medium hover:bg-blue-700 transition"
+          >
+            Créer un compte
+          </button>
         </div>
       </div>
     </section>

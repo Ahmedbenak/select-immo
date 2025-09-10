@@ -72,15 +72,16 @@ export default function ListingDetail() {
   const price = new Intl.NumberFormat('fr-FR').format(item.price_xof || 0);
   const location = [item.commune, item.city].filter(Boolean).join(', ');
 
-  // Liens contact
-  const phone = (item.whatsapp || item.phone || '').replace(/\s+/g, '');
-  const wa = phone
-    ? `https://wa.me/${phone.replace('+','')}?text=${encodeURIComponent(
+  // Liens contact (email retiré pour sécurité)
+  const phoneRaw = (item.whatsapp || item.phone || '').replace(/\s+/g, '');
+  const wa = phoneRaw
+    ? `https://wa.me/${phoneRaw.replace('+','')}?text=${encodeURIComponent(
         `Bonjour, je suis intéressé par votre annonce #${item.id} - ${item.title}`
       )}`
     : null;
   const tel = item.phone ? `tel:${item.phone}` : null;
-  const mailto = item.email ? `mailto:${item.email}?subject=${encodeURIComponent(`Annonce #${item.id} - ${item.title}`)}` : null;
+
+  const hasAnyContact = Boolean(wa || tel);
 
   return (
     <main className="min-h-screen bg-gray-50">
@@ -127,11 +128,36 @@ export default function ListingDetail() {
             <li><b>Clim</b> : {item.has_ac ? 'Oui' : 'Non'}</li>
           </ul>
 
-          <div className="grid gap-2">
-            {wa && <a className="w-full text-center border rounded-lg px-3 py-2" href={wa} target="_blank" rel="noreferrer">Contacter via WhatsApp</a>}
-            {tel && <a className="w-full text-center border rounded-lg px-3 py-2" href={tel}>Appeler</a>}
-            {mailto && <a className="w-full text-center border rounded-lg px-3 py-2" href={mailto}>Envoyer un email</a>}
-          </div>
+          {/* Contact — sans email */}
+          {hasAnyContact ? (
+            <div className="grid gap-2">
+              {wa && (
+                <a
+                  className="w-full text-center border rounded-lg px-3 py-2 hover:bg-gray-50"
+                  href={wa}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="Contacter via WhatsApp"
+                >
+                  Contacter via WhatsApp
+                </a>
+              )}
+              {tel && (
+                <a
+                  className="w-full text-center border rounded-lg px-3 py-2 hover:bg-gray-50"
+                  href={tel}
+                  aria-label="Appeler le propriétaire"
+                >
+                  Appeler
+                </a>
+              )}
+            </div>
+          ) : (
+            <div className="rounded-lg border bg-gray-50 p-3 text-sm text-gray-600">
+              Les contacts par email ne sont pas proposés pour des raisons de sécurité.  
+              Utilisez WhatsApp ou l’appel lorsque disponibles.
+            </div>
+          )}
         </aside>
       </section>
 
