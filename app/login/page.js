@@ -5,33 +5,47 @@ import { useRouter } from 'next/navigation';
 
 export default function LoginPage() {
   const router = useRouter();
-  const [email,setEmail] = useState('');
-  const [password,setPassword] = useState('');
-  const [err,setErr] = useState('');
-  const [loading,setLoading] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [err, setErr] = useState('');
+  const [loading, setLoading] = useState(false);
 
+  // Si déjà connecté → redirige vers /publier et rafraîchit l'UI (Header)
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => {
-      if (data.user) router.push('/publier'); // déjà connecté
+      if (data?.user) {
+        router.replace('/publier');
+        router.refresh();
+      }
     });
   }, [router]);
 
-  async function onLogin(e){
+  async function onLogin(e) {
     e.preventDefault();
-    setErr(''); setLoading(true);
+    setErr('');
+    setLoading(true);
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     setLoading(false);
     if (error) return setErr(error.message);
-    router.push('/publier');
+
+    // IMPORTANT : force la mise à jour visuelle (Header) après login
+    router.replace('/publier');
+    router.refresh();
   }
 
-  async function onRegister(e){
+  async function onRegister(e) {
     e.preventDefault();
-    setErr(''); setLoading(true);
+    setErr('');
+    setLoading(true);
     const { error } = await supabase.auth.signUp({ email, password });
     setLoading(false);
     if (error) return setErr(error.message);
-    alert('Compte créé. Vérifie tes emails si la confirmation est activée, puis connecte-toi.');
+
+    // Selon ta config, un email de confirmation peut être requis.
+    // On redirige quand même et on force un refresh : si la session n'existe pas encore,
+    // la page /publier te renverra vers /login (guard), sinon tu es connecté.
+    router.replace('/publier');
+    router.refresh();
   }
 
   return (
@@ -43,21 +57,38 @@ export default function LoginPage() {
         {err && <p className="text-red-600 mb-3">{err}</p>}
 
         <form className="grid gap-3" onSubmit={onLogin}>
-          <input className="border rounded-lg px-3 py-2" placeholder="Email"
-                 type="email" onChange={e=>setEmail(e.target.value)} />
-          <input className="border rounded-lg px-3 py-2" placeholder="Mot de passe"
-                 type="password" onChange={e=>setPassword(e.target.value)} />
-          <button disabled={loading} className="px-3 py-2 rounded-lg bg-slate-900 text-white">
+          <input
+            className="border rounded-lg px-3 py-2"
+            placeholder="Email"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <input
+            className="border rounded-lg px-3 py-2"
+            placeholder="Mot de passe"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          <button
+            disabled={loading}
+            className="px-3 py-2 rounded-lg bg-slate-900 text-white hover:opacity-90 disabled:opacity-60"
+            type="submit"
+          >
             {loading ? '...' : 'Connexion'}
           </button>
         </form>
 
         {/* Nouveau bouton "Créer un compte" */}
         <div className="mt-4">
-          <button 
-            onClick={onRegister} 
+          <button
+            onClick={onRegister}
             disabled={loading}
-            className="w-full px-3 py-2 rounded-lg bg-blue-600 text-white font-medium hover:bg-blue-700 transition"
+            className="w-full px-3 py-2 rounded-lg bg-blue-600 text-white font-medium hover:bg-blue-700 transition disabled:opacity-60"
+            type="button"
           >
             Créer un compte
           </button>
