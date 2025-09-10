@@ -120,7 +120,8 @@ export default function Home() {
                 )}
 
                 <div className="p-3">
-                  <h3 className="font-semibold line-clamp-1">{it.title || 'Sans titre'}</h3>
+                  <h3 className="font-bold text-lg text-black line-clamp-1">{it.title || 'Sans titre'}</h3>
+
                   <p className="text-sm text-gray-600">
                     {new Intl.NumberFormat('fr-FR').format(it.price_xof)} XOF · {it.property_type}
                   </p>
@@ -129,7 +130,7 @@ export default function Home() {
                   </p>
                   <Link
                     href={`/listing/${it.id}`}
-                    className="inline-block mt-2 text-sm underline"
+  className="mt-3 inline-block rounded-md bg-blue-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-blue-700 transition"
                   >
                     Voir le détail
                   </Link>
