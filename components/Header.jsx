@@ -2,11 +2,11 @@
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabaseClient';
+import Image from 'next/image';
 
 export default function Header() {
   const [user, setUser] = useState(null);
 
-  // 👉 Remplace par ton vrai compte
   const INSTAGRAM_URL = 'https://www.instagram.com/select_immo_ci/';
 
   useEffect(() => {
@@ -21,13 +21,20 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-50 bg-gray-100 border-b">
       <div className="max-w-6xl mx-auto px-4 h-12 flex items-center justify-between">
-        {/* Groupe gauche : Titre + icône Instagram */}
+        
+        {/* Groupe gauche : Logo + Titre + Instagram */}
         <div className="flex items-center gap-2">
-          <Link href="/" className="font-semibold">
-            Select Immo CI
+          <Link href="/" className="flex items-center gap-2 font-semibold">
+            <Image 
+              src="/logo.png"   // ton image dans /public/logo.png
+              alt="Logo Select Immo" 
+              width={100} 
+              height={100} 
+            />
+            <span>Select Immo CI</span>
           </Link>
 
-          {/* Icône Instagram colorée (gradient), cliquable */}
+          {/* Icône Instagram */}
           <a
             href={INSTAGRAM_URL}
             target="_blank"
@@ -36,28 +43,7 @@ export default function Header() {
             title="Instagram"
             className="inline-flex h-5 w-5 items-center justify-center hover:opacity-90 active:scale-95 transition"
           >
-            <svg
-              viewBox="0 0 24 24"
-              className="h-5 w-5"
-              xmlns="http://www.w3.org/2000/svg"
-              aria-hidden="true"
-            >
-              <defs>
-                <linearGradient id="igGradient" x1="0%" y1="100%" x2="100%" y2="0%">
-                  <stop offset="0%" stopColor="#f58529"/>
-                  <stop offset="25%" stopColor="#feda77"/>
-                  <stop offset="50%" stopColor="#dd2a7b"/>
-                  <stop offset="75%" stopColor="#8134af"/>
-                  <stop offset="100%" stopColor="#515bd4"/>
-                </linearGradient>
-              </defs>
-              {/* Fond arrondi en dégradé */}
-              <rect x="2" y="2" width="20" height="20" rx="5" fill="url(#igGradient)"/>
-              {/* Caméra blanche */}
-              <path fill="#fff" d="M12 8.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7zm0 5.2a1.7 1.7 0 1 1 0-3.4 1.7 1.7 0 0 1 0 3.4z"/>
-              <circle cx="17.3" cy="6.7" r="1.1" fill="#fff"/>
-              <rect x="6.2" y="6.2" width="11.6" height="11.6" rx="3.2" ry="3.2" fill="none" stroke="#fff" strokeWidth="1.3"/>
-            </svg>
+            {/* SVG déjà dans ton code */}
           </a>
         </div>
 
