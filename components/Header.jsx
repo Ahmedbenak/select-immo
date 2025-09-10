@@ -16,10 +16,10 @@ export default function Header() {
     // État initial
     supabase.auth.getUser().then(({ data }) => setUser(data?.user || null));
 
-    // Se mettre à jour sur login/logout/refresh
+    // Écoute login/logout/refresh → met à jour l'UI
     const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user || null);
-      router.refresh(); // force la mise à jour visuelle
+      router.refresh();
     });
 
     return () => sub?.subscription?.unsubscribe?.();
@@ -33,18 +33,23 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-50 bg-gray-100 border-b">
       <div className="max-w-6xl mx-auto px-4 h-12 flex items-center justify-between">
-        {/* Groupe gauche : Logo + Titre + Instagram */}
+        {/* Gauche : Logo + Marque + Slogan + Instagram */}
         <div className="flex items-center gap-3">
           <Link href="/" className="flex items-center gap-2 font-semibold">
             <Image
-              src="/logo.png"     // /public/logo.png
+              src="/logo.png"          // /public/logo.png
               alt="Logo Select Immo"
-              width={100}
-              height={100}
+              width={54}
+              height={54}
               className="rounded"
               priority
             />
-            <span className="text-sm sm:text-base">Select Immo CI</span>
+            <span className="flex flex-col leading-tight">
+              <span className="text-sm sm:text-base">Select Immo CI</span>
+              <span className="hidden sm:block text-[11px] text-gray-500">
+                Le meilleur de l’immobilier, en un clic
+              </span>
+            </span>
           </Link>
 
           {/* Icône Instagram en couleur */}
@@ -74,13 +79,13 @@ export default function Header() {
           </a>
         </div>
 
-        {/* Liens centre */}
+        {/* Centre : Liens */}
         <nav className="hidden sm:flex gap-4 text-gray-700">
           <Link href="/" className="hover:underline">Accueil</Link>
           <Link href="/publier" className="hover:underline">Publier</Link>
         </nav>
 
-        {/* Auth droite */}
+        {/* Droite : Auth */}
         <div className="flex items-center gap-2">
           {user ? (
             <>
