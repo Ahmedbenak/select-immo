@@ -40,7 +40,7 @@ export default function PublierPage() {
         .from('listings')
         .insert({
           owner_id: user.id,
-          status: 'draft',
+          status: 'published',
           title: form.title?.trim() || null,
           price_xof: Number(form.price_xof || 0),
           listing_type: form.listing_type,
