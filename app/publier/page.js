@@ -78,7 +78,7 @@ export default function PublierPage() {
         if (ins.error) console.error('INSERT IMAGE ROW ERROR', ins.error);
       }
 
-      alert('Annonce enregistrée en brouillon. Un admin doit la publier.');
+      alert('Annonce publiée avec succès !');
       router.push(`/listing/${listing.id}`);
     } catch (e) {
       console.error('SUBMIT FATAL ERROR', e);
