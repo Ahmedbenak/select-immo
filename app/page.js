@@ -103,7 +103,7 @@ export default function Home() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.25, delay: idx * 0.03 }}
                 whileHover={{ y: -2 }}
-                className="relative bg-white rounded-2xl overflow-hidden border hover:shadow-sm transition"
+                className="relative bg-white rounded-2xl overflow-hidden shadow-md ring-1 ring-gray-200 hover:shadow-lg hover:-translate-y-0.5 transition duration-200"
               >
                 {primary?.url ? (
                   // eslint-disable-next-line @next/next/no-img-element
@@ -119,7 +119,7 @@ export default function Home() {
                   </div>
                 )}
 
-                <div className="p-3">
+                <div className="p-4">
                   <h3 className="font-bold text-lg text-black line-clamp-1">{it.title || 'Sans titre'}</h3>
 
                   <p className="text-sm text-gray-600">
@@ -130,7 +130,7 @@ export default function Home() {
                   </p>
                   <Link
                     href={`/listing/${it.id}`}
-  className="mt-3 inline-block rounded-md bg-blue-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-blue-700 transition"
+                    className="mt-3 mb-6 inline-block rounded-md bg-blue-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-blue-700 transition"
                   >
                     Voir le détail
                   </Link>
